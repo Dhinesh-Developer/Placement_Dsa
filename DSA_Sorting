@@ -1,0 +1,178 @@
+// 1. sort colors
+
+class Solution {
+    public void sortColors(int[] nums) {
+        int n = nums.length;
+        int low=0,mid = 0,high = n-1;
+        while(mid <= high){
+            if(nums[mid] == 0){
+                int temp = nums[low];
+                nums[low] = nums[mid];
+                nums[mid] = temp;
+                low++;
+                mid++;
+            }else if(nums[mid] == 1){
+                mid++;
+            }else{
+                int temp = nums[mid];
+                nums[mid] = nums[high];
+                nums[high] = temp;
+                high--;
+            }
+        }
+    }
+}
+
+// 2. merge sorted array
+
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        for(int i=0,j=m;i<n;i++){
+            nums1[j++] = nums2[i];
+        }
+        Arrays.sort(nums1);
+    }
+}
+
+// 3. Kth largest element in the array
+
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        int n = nums.length;
+        Arrays.sort(nums);
+        return nums[n-k];
+    }
+}
+
+// 4. sort an array
+
+class Solution {
+    public void merge(int[] nums,int low,int mid,int high){
+        List<Integer> li = new ArrayList<>();
+        int left = low;
+        int right = mid+1;
+        while(left <= mid && right <=high){
+            if(nums[left] <= nums[right]){
+                li.add(nums[left]);
+                left++;
+            }else{
+                li.add(nums[right]);
+                right++;
+            }
+        }
+
+        while(left<=mid){
+            li.add(nums[left]);
+            left++;
+        }
+        while(right<=high){
+            li.add(nums[right]);
+            right++;
+        }
+
+        for(int i=low;i<=high;i++){
+            nums[i] = li.get(i-low);
+        }
+    }
+    public void mergeHelper(int[] nums,int low,int high){
+        if(low >= high) return;
+        int mid = low + (high-low)/2;
+        mergeHelper(nums,low,mid);
+        mergeHelper(nums,mid+1,high);
+        merge(nums,low,mid,high);
+    }
+    public int[] sortArray(int[] nums) {
+        int n = nums.length;
+        mergeHelper(nums,0,n-1);
+        return nums;
+    }
+}
+
+// 5. Majority element
+
+class Solution {
+    public int majorityElement(int[] nums) {
+        int n = nums.length;
+        int k = n/2;
+        Map<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<n;i++){
+            map.put(nums[i],map.getOrDefault(nums[i],0)+1);
+        }
+
+        for(Map.Entry<Integer,Integer> x : map.entrySet()){
+            if(x.getValue() > k){
+                return x.getKey();
+            }
+        }
+
+        return -1;
+    }
+}
+
+// 6. Move Zeros
+
+class Solution {
+    public void moveZeroes(int[] nums) {
+        int n = nums.length;
+        int j=0;
+        for(int i=0;i<n;i++){
+            if(nums[i] != 0){
+                nums[j++] = nums[i];
+            }
+        }
+
+        while(j< n){
+            nums[j++] = 0;
+        }
+    }
+}
+
+// 7. largest number
+
+class Solution {
+    public String largestNumber(int[] nums) {
+       
+       // convert the integers to Strings
+       String[] arr = new String[nums.length];
+       for(int i=0;i<nums.length;i++){
+        arr[i] = String.valueOf(nums[i]);
+       }
+
+        // sort the strings based on the custom comparator
+       Arrays.sort(arr,(a,b) ->(b+a).compareTo(a+b));
+
+        // Edges Case : If the largest number is "0", return "0"
+       if(arr[0].equals("0")){
+        return "0";
+       }
+
+        // Join the sorted strings to form the final number
+       StringBuilder res = new StringBuilder();
+       for(String x : arr){
+        res.append(x);
+       }
+
+       return res.toString();
+    }
+}
+
+// 8. Find minimum in rotated sorted array
+
+class Solution {
+    public int findMin(int[] nums) {
+        int n = nums.length;
+        int ans = Integer.MAX_VALUE;
+        int low = 0,high =n-1;
+        while(low <= high){
+            int mid = low+(high-low)/2;
+            if(nums[low] <= nums[mid]){
+                ans = Math.min(ans,nums[low]);
+                low = mid+1;
+            }else{
+                ans = Math.min(ans,nums[mid]);
+                high = mid-1;
+            }
+        }
+        return ans;
+    }
+}
