@@ -1,0 +1,149 @@
+// 1. Two Sum
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        int n = nums.length;
+        Map<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<n;i++){
+            int rem = target - nums[i];
+            if(map.containsKey(rem)){
+                return new int[]{map.get(rem),i};
+            }
+            map.put(nums[i],i);
+        }
+        return new int[]{-1,-1};
+    }
+}
+
+// 2. contains duplicate
+
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        int n = nums.length;
+        Map<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<n;i++){
+            if(map.containsKey(nums[i])){
+                return true;
+            }
+            map.put(nums[i],1);
+        }
+        return false;
+    }
+}
+
+// 3. longest consecutive sequence
+
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        int n = nums.length;
+        Arrays.sort(nums);
+        if(nums.length == 0) return 0;
+        int maxLen = 1;
+        int cnt = 1;
+        for(int i=1;i<n;i++){
+            if(nums[i] == nums[i-1]) continue;
+            else if(nums[i] == nums[i-1]+1) cnt++;
+            else{
+                cnt = 1;
+            }
+            maxLen = Math.max(maxLen,cnt);
+        }
+        return maxLen;
+
+    }
+}
+
+// 4. Subarray sum equals k
+
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+       int n = nums.length;
+       int cnt =0 ;
+       for(int i=0;i<n;i++){
+        int sum = 0;
+        for(int j=i;j<n;j++){
+            sum += nums[j];
+            if(sum == k) cnt++;
+            if(sum > k) continue;
+        }
+       }
+       return cnt;
+    }
+}
+
+// 5. Top k frequent Element
+
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        
+        int n = nums.length;
+        Map<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<n;i++){
+            map.put(nums[i],map.getOrDefault(nums[i],0)+1);
+        }
+
+        PriorityQueue<Integer> pq = new PriorityQueue<>(
+            (a,b) -> map.get(a) - map.get(b)
+        );
+
+        for(int x : map.keySet()){
+            pq.offer(x);
+
+            if(pq.size() > k){
+                pq.poll();
+            }
+        }
+
+        int[] res = new int[k];
+        for(int i=k-1;i>=0;i--){
+            res[i] = pq.poll();
+        }
+
+        return res;
+    }
+}
+
+// 6. valid suduko
+
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        Set seen = new HashSet<>();
+        for(int i=0;i<9;i++){
+            for(int j=0;j<9;j++){
+                if(board[i][j] != '.'){
+                    String b = "("+board[i][j]+")";
+                    if(!seen.add(b+i) || !seen.add(j+b) || !seen.add(i/3 + b+j/3)){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+}
+
+//7. First missing positive
+
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        int n = nums.length;      
+        for(int i=0;i<n;i++){
+            while(nums[i] >0 && nums[i] <=n && nums[nums[i]-1] != nums[i]){
+                int temp = nums[nums[i] - 1];
+                nums[nums[i] - 1] = nums[i];
+                nums[i] = temp;
+            }
+        }
+
+        // first place where index doesn't match value
+
+        for(int i=0;i<n;i++){
+            if(nums[i] != i+1){
+                return i+1;
+            }
+        }
+        
+        // if all place are correct
+        return n+1;
+    }
+}
