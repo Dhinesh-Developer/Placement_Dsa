@@ -55,3 +55,53 @@ class Solution {
     }
 }
 
+//2. Clone Graph
+
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> neighbors;
+    public Node() {
+        val = 0;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val) {
+        val = _val;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val, ArrayList<Node> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+}
+*/
+
+class Solution {
+    public Node cloneGraph(Node node) {
+        if(node == null) return null;
+        Map<Node,Node> map = new HashMap<>();
+        bfs(node,map);
+        return map.get(node);
+    }
+
+    private void bfs(Node startNode,Map<Node,Node> map){
+        Queue<Node> q = new ArrayDeque<>();
+        map.put(startNode,new Node(startNode.val));
+        q.offer(startNode);
+
+        while(!q.isEmpty()){
+            Node node = q.poll();
+            for(Node x : node.neighbors){
+                if(map.containsKey(x)){
+                    map.get(node).neighbors.add(map.get(x));
+                }else{
+                    map.put(x,new Node(x.val));
+                    q.offer(x);
+                    map.get(node).neighbors.add(map.get(x));
+                }
+            }
+        }    
+    }
+}
+
