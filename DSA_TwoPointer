@@ -1,0 +1,220 @@
+// 1. Two sum - pair with Given sum
+
+class Solution {
+    boolean twoSum(int arr[], int target) {
+        int n = arr.length;
+        Arrays.sort(arr);
+        int l = 0,r = n-1;
+        while(l<r){
+            int sum = arr[l]+arr[r];
+            if(sum == target){
+                return true;
+            }else if(sum > target){
+                r--;
+            }else{
+                l++;
+            }
+        }
+        return false;
+    }
+}
+
+// 2. Triplet sum in the array
+
+class Solution {
+    public boolean hasTripletSum(int arr[], int target) {
+        // code Here
+        int n = arr.length;
+        Arrays.sort(arr);
+        for(int i=0;i<n;i++){
+            int l = i+1;
+            int r = n-1;
+            while(l<r){
+                int sum = arr[i]+arr[l]+arr[r];
+                if(sum == target){
+                    return true;
+                }else if(sum > target){
+                    r--;
+                }else{
+                    l++;
+                }
+            }
+        }
+        return false;
+    }
+}
+
+//3. 4sum
+
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+       int n = nums.length;
+       List<List<Integer>> res = new ArrayList<>();
+       Arrays.sort(nums);
+       for(int i=0;i<n-3;i++){
+        if(i>0 && nums[i] == nums[i-1]) continue;
+        for(int j=i+1;j<n;j++){
+            if(j>i+1 && nums[j] == nums[j-1]) continue;
+            int l = j+1;
+            int r = n-1;
+            while(l<r){
+                long sum = (long)nums[i]+nums[j]+nums[l]+nums[r];
+                if(sum == target){
+                    res.add(Arrays.asList(nums[i],nums[j],nums[l],nums[r]));
+                    l++;
+                    r--;
+                    if(l<r && nums[l] == nums[l-1]) l++;
+                    if(l<r && nums[r] == nums[r+1]) r--;
+                }else if(sum < target){
+                    l++;
+                }else{
+                    r--;
+                }
+            }
+        }
+       }
+       return res;
+    }
+}
+
+//4. Find Triplet with zero sum
+
+class Solution {
+    public boolean findTriplets(int[] arr) {
+        // code here.
+        int n = arr.length;
+        Arrays.sort(arr);
+        int target = 0;
+        for(int i=0;i<n;i++){
+            int l = i+1;
+            int r = n-1;
+            while(l<r){
+                int sum = arr[i]+arr[l]+arr[r];
+                if(sum == target){
+                    return true;
+                }else if(sum > target){
+                    r--;
+                }else{
+                    l++;
+                }
+            }
+        }
+        return false;
+    }
+}
+
+//5. Union of Array
+
+class Solution {
+    public static ArrayList<Integer> findUnion(int[] a, int[] b) {
+        Set<Integer> set = new TreeSet<>();
+        for(int x : a) set.add(x);
+        for(int x : b) set.add(x);
+        return new ArrayList<>(set);
+    }
+}
+
+// 6. Intersection of Array with distinct
+
+class Solution {
+    public static int intersectSize(int a[], int b[]) {
+       Arrays.sort(a);
+       Arrays.sort(b);
+       int cnt =0 ;
+       int i =0,j = 0;
+       while(i< a.length && j <b.length){
+           if(a[i] == b[j]){
+               cnt++;
+               i++;
+               j++;
+           }else if(a[i] > b[j]){
+               j++;
+           }else{
+               i++;
+           }
+       }
+       return cnt;
+    }
+}
+
+// 7. Remove duplicate 
+class Solution {
+    ArrayList<Integer> removeDuplicates(int[] arr) {
+        Set<Integer> set = new LinkedHashSet<>();
+        for(int x : arr){
+            set.add(x);
+        }
+        return new ArrayList<>(set);
+    }
+}
+
+// 8. kth element of two sorted array
+
+class Solution {
+    public int kthElement(int a[], int b[], int k) {
+        // code here
+        List<Integer> res = new ArrayList<>();
+        for(int x : a) res.add(x);
+        for(int x : b) res.add(x);
+        
+        Collections.sort(res);
+        
+        int ind = 0;
+        for(int x : res){
+            ind++;
+            if(ind == k){
+                return x;
+            }
+        }
+        return -1;
+    }
+}
+
+//9. Trapping rain water
+
+class Solution {
+    public int maxWater(int arr[]) {
+        int n = arr.length;
+        int left = 0,right = n-1;
+        int leftMax = 0,rightMax = 0;
+        int total = 0;
+        
+        while(left <= right){
+            if(arr[left] < arr[right]){
+                if(arr[left] > leftMax){
+                    leftMax = arr[left];
+                }else{
+                    total += leftMax - arr[left];
+                }
+                left++;
+            }else{
+                if(arr[right] > rightMax){
+                    rightMax = arr[right];
+                }else{
+                    total += rightMax - arr[right];
+                }
+                right--;
+            }
+        }
+        return total;
+    }
+}
+
+// 10. longest subarray with sum k
+
+class Solution {
+    public int longestSubarray(int[] arr, int k) {
+         Map<Integer,Integer> map = new HashMap<>();
+        map.put(0,-1);
+        int sum = 0,longest = 0;
+        for(int i=0;i<arr.length;i++){
+            sum += arr[i];
+            if(map.containsKey(sum-k)){
+                int len = i-map.get(sum-k);
+                longest = Math.max(len,longest);
+            }
+            map.putIfAbsent(sum,i);
+        }
+        return longest;
+    }
+}
