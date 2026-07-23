@@ -192,3 +192,35 @@ class Solution {
 
     }
 }
+
+// 10. sliding window maximum
+
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int n = nums.length;
+        if(nums == null || k<=0) return new int[0];
+        int[] res = new int[n-k+1];
+        Deque<Integer> dq = new ArrayDeque<>(); // store indices
+        int ri = 0;
+
+        for(int i=0;i<n;i++){
+            //remove indices out of current window
+            if(!dq.isEmpty() && dq.peekFirst() <= i-k){
+                dq.pollFirst();
+            }
+            // remove indices whose corresponding values are less than nums[i]
+            while(!dq.isEmpty() && nums[dq.peekLast()] < nums[i]){
+                dq.pollLast();
+            }
+
+            dq.offerLast(i); // Add current index
+
+            // starting from index k-1, store res
+            if(i >= k-1){
+                res[ri++] = nums[dq.peekFirst()]; // front of deque is max
+            }
+        }
+        return res;
+
+    }
+}
